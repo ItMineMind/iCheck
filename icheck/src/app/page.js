@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { db } from "../../api/firebaseCRUD";
+import Link from 'next/link';
 
 export default function Home() {
   const [data, setData] = useState([]);
@@ -48,6 +49,9 @@ export default function Home() {
               {data.content}
               <button onClick={() => deleteData(data.id)}>Delete</button>
               <button onClick={() => plusCount(data.id)}>Plus Count</button>
+              <Link href={`/item/${data.id}`}>
+                  View Item
+              </Link>
             </p>
           </div>
         ))}

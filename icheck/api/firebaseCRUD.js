@@ -51,16 +51,20 @@ const getItems = async() => {
 }
 
 const getItem = async (id) => {
-    const docRef = doc(firestore, "items", id);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-        return docSnap.data();
-    } else {
-        console.log("No such document!");
+    try {
+        const docRef = doc(firestore, "items", id);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+            return { id: docSnap.id, ...docSnap.data() };
+        } else {
+            console.log("No such document!");
+            return null;
+        }
+    } catch (error) {
+        console.error("Error getting document: ", error);
         return null;
     }
-}
+};
 
 const searchCount = async (id) => {
     const collectionRef = collection(firestore, 'items');
