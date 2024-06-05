@@ -93,5 +93,6 @@ export const db = {
     getItems,
     getItem,
     searchCount,
+    get5TopItem
 };
 
