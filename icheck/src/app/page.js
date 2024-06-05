@@ -5,13 +5,15 @@ import { db } from "../../api/firebaseCRUD";
 
 export default function Home() {
   const [data, setData] = useState([]);
+  const [refreshKey , setRefreshKey] = useState(0);
 
   useEffect(() => {
     async function fetchData() {
       setData(await db.getItems());
     }
     fetchData();
-  }, []);
+    
+  }, [refreshKey]);
 
   const [name, setName] = useState("");
   const [content, setContent] = useState("");
@@ -20,17 +22,21 @@ export default function Home() {
   function create() {
     if(name === "" || content === "") return;
     db.addItem(name, 1, content, "testImgPath")
+    refreshKey === 0 ? setRefreshKey(1) : setRefreshKey(0);
   }
 
   function deleteData(id){
-    setTestData(testData.filter(data => data.id !== id));
+    console.log("Deleting document with ID: ", id);
+    db.deleteItem(id);
+    setData(data.filter((data) => data.id !== id));
+    refreshKey === 0 ? setRefreshKey(1) : setRefreshKey(0);
   }
 
   return (
     <div>
       {data.map((data) => (
         <div key={data.id}>
-          <p>Name: {data.title} content: {data.content} <button onClick={() => deleteData(data.id)}>Delete</button></p>
+          <p>ID: {data.id} Name: {data.title} content: {data.content} <button onClick={() => deleteData(data.id)}>Delete</button></p>
         </div>
       ))}
       <a href="/addData">Add Data (Goto add data page)</a>
@@ -39,6 +45,7 @@ export default function Home() {
       <p>--</p>
       <input type="text" onChange={(e) => setContent(e.target.value)} /><br />
       <button onClick={() => create()}>Add new</button>
+      <button onClick={() => console.log(data)}>Show Data</button>
     </div>
   );
 }
