@@ -26,9 +26,12 @@ export default function Home() {
   }
 
   function deleteData(id){
-    console.log("Deleting document with ID: ", id);
     db.deleteItem(id);
-    setData(data.filter((data) => data.id !== id));
+    refreshKey === 0 ? setRefreshKey(1) : setRefreshKey(0);
+  }
+
+  function plusCount(id){
+    db.searchCount(id);
     refreshKey === 0 ? setRefreshKey(1) : setRefreshKey(0);
   }
 
@@ -36,7 +39,10 @@ export default function Home() {
     <div>
       {data.map((data) => (
         <div key={data.id}>
-          <p>ID: {data.id} Name: {data.title} content: {data.content} <button onClick={() => deleteData(data.id)}>Delete</button></p>
+          <p>search count: {data.searchCount} Name: {data.title} content: {data.content} 
+          <button onClick={() => deleteData(data.id)}>Delete</button>
+          <button onClick={() => plusCount(data.id)}>Plus Count</button>
+          </p>
         </div>
       ))}
       <a href="/addData">Add Data (Goto add data page)</a>

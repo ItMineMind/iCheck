@@ -1,12 +1,13 @@
 import { firestore } from "./firebaseConfig";
-import { addDoc, collection, getDocs, doc, setDoc, deleteDoc, getDoc } from "firebase/firestore";
+import { addDoc, collection, getDocs, doc, setDoc, deleteDoc, getDoc, updateDoc } from "firebase/firestore";
 
 const addItem = async (title, isAllow, content, imgPath) => {
     const docRef = await addDoc(collection(firestore, "items"), {
-        title,
-        isAllow,
-        content,
-        imgPath,
+        title: title,
+        isAllow: isAllow,
+        content: content,
+        imgPath: imgPath,
+        searchCount: 0
       });
 
       console.log("Document written with ID: ", docRef.id);
@@ -49,10 +50,28 @@ const getItem = async (id) => {
     }
 }
 
+const searchCount = async (id) => {
+    const collectionRef = collection(firestore, 'items');
+    const docRef = doc(collectionRef, id);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+        const newCount = docSnap.data().searchCount + 1;
+        await updateDoc(docRef, {
+            searchCount: newCount
+        });
+    } else {
+        console.log("No such document!");
+        return null;
+    }
+
+}
+
 export const db = {
     addItem,
     deleteItem,
     getItems,
-    getItem
+    getItem,
+    searchCount,
 };
 
