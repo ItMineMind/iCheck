@@ -61,6 +61,10 @@ export default function Home() {
 
   return (
     <div>
+        <Link href={`/login`}>
+          Login Page
+        </Link><br />
+
       All item
       <DataShow data={data} />
 
