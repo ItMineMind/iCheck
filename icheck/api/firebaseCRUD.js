@@ -1,13 +1,14 @@
 import { firestore } from "./firebaseConfig";
 import { addDoc, collection, getDocs, doc, setDoc, deleteDoc, getDoc, updateDoc } from "firebase/firestore";
 
-const addItem = async (title, isAllow, content, imgPath) => {
+const addItem = async (title, isAllow, content, imgPath , catagories) => {
     const docRef = await addDoc(collection(firestore, "items"), {
         title: title,
         isAllow: isAllow,
         content: content,
         imgPath: imgPath,
-        searchCount: 0
+        searchCount: 0,
+        catagories: catagories,
       });
 
       console.log("Document written with ID: ", docRef.id);
@@ -87,11 +88,22 @@ const get5TopItem = async () => {
     return top5Item;
 }
 
+const showCatagories = async (catagories) => {
+    const itemDocs = await getDocs(collection(firestore, "items"));
+    const itemsData = itemDocs.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const filterItem = itemsData.filter(item => item.catagories.includes(catagories));
+    return filterItem;
+}
+
+
+
 export const db = {
     addItem,
     deleteItem,
     getItems,
     getItem,
     searchCount,
+    get5TopItem,
+    showCatagories,
 };
 
