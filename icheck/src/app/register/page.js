@@ -1,10 +1,9 @@
 'use client'
-import Link from 'next/link';
-
 import { useState } from "react";
 export default function Page(){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [passwordConfirm, setPasswordConfirm] = useState('');
 
     const handleEmailChange = (e) => {
         console.log("changed email")
@@ -25,11 +24,8 @@ export default function Page(){
         <>
             email<input type='text' onChange={handleEmailChange}/><br />
             password<input type='password' onChange={handlePasswordChange}/><br />
+            confirm password<input type='password' onChange={handlePasswordChange}/><br />
             <input type='submit' onClick={handleSubmit}/>
-
-            <Link href={`/register`}>
-                  register
-            </Link>
         </>
     );
 }
