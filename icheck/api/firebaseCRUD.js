@@ -67,6 +67,14 @@ const searchCount = async (id) => {
 
 }
 
+const get5TopItem = async () => {
+    const itemDocs = await getDocs(collection(firestore, "items"));
+    const itemsData = itemDocs.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const sortItem = itemsData.sort((a, b) => b.searchCount - a.searchCount);
+    const top5Item = sortItem.slice(0, 5);
+    return top5Item;
+}
+
 export const db = {
     addItem,
     deleteItem,
