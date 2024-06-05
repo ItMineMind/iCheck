@@ -34,8 +34,20 @@ const deleteItem = async (id) => {
 const getItems = async() => {
     const itemDocs = await getDocs(collection(firestore, "items"));
     const itemsData = itemDocs.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-    return itemsData;
+    const sortedItems = itemsData.sort((a, b) => {
+        const titleA = a.title.toLowerCase();
+        const titleB = b.title.toLowerCase();
+        
+        if (titleA < titleB) {
+            return -1;
+        }
+        if (titleA > titleB) {
+            return 1; 
+        }
+        return 0; 
+    
+    });
+    return sortedItems;
 }
 
 const getItem = async (id) => {
